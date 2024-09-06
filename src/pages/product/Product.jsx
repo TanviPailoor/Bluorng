@@ -1,41 +1,63 @@
-import React from 'react';
-import { useState } from 'react';
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addItem } from "../../redux/slices/cartSlice";
 import "./Product.scss";
 import { product } from "../../utilities";
-import size from "../../assets/images/size.jpg"
+import size from "../../assets/images/size.jpg";
+
 const Product = () => {
-    const [selectedImage, setSelectedImage] = useState(product.mainImage.img);
+	const [selectedImage, setSelectedImage] = useState(product.mainImage.img);
 	const [selectedSize, setSelectedSize] = useState(null);
 	const [showSizeChart, setShowSizeChart] = useState(false);
 	const [isAddedToCart, setIsAddedToCart] = useState(false);
+	const navigate = useNavigate(); // Use navigate for redirecting
+	const dispatch = useDispatch();
 
 	const handleImageClick = (imageSrc) => {
 		setSelectedImage(imageSrc);
 	};
-	
+
 	const handleSizeSelect = (size) => {
 		setSelectedSize(size);
 	};
+
 	const toggleSizeChart = () => {
 		setShowSizeChart(!showSizeChart);
 	};
-	const handleSubmit = (e) => {
-		e.preventDefault();
+
+	// Add to cart logic
+	const addToCart = () => {
 		if (selectedSize) {
-			console.log(`Selected size: ${selectedSize}`);
-		} else {
-			alert("Please select a size before proceeding.");
-		}
-	};
-	const handleAddToCart = () => {
-		if (selectedSize) {
+			dispatch(
+				addItem({
+					id: product.productDetails.id,
+					productName: product.productDetails.name,
+					price: product.productDetails.price,
+					size: selectedSize,
+					color: product.productDetails.color,
+					ProductImg: selectedImage,
+					quantity: 1,
+				})
+			);
 			setIsAddedToCart(true);
-			console.log(`Product added to cart with size: ${selectedSize}`);
 		} else {
 			alert("Please select a size before adding to cart.");
 		}
 	};
-  return (
+
+	// Handle Buy Now - adds to cart and then navigates
+	const handleBuyNow = (e) => {
+		e.preventDefault();
+		if (selectedSize) {
+			addToCart(); // Add item to cart first
+			navigate("/cart"); // Then navigate to cart page
+		} else {
+			alert("Please select a size before proceeding.");
+		}
+	};
+
+	return (
 		<section className="product-main">
 			<section className="product-top">
 				<section className="product-top-left">
@@ -59,7 +81,8 @@ const Product = () => {
 				<section className="product-top-right">
 					<section className="product-name">
 						<h2>{product.productDetails.name}</h2>
-						<p>{product.productDetails.price}</p>
+						<p>Price: ₹{product.productDetails.price}</p>
+						<p>Color: {product.productDetails.color}</p>
 					</section>
 					<section className="product-details">
 						<section className="desc">
@@ -87,7 +110,7 @@ const Product = () => {
 							<button onClick={toggleSizeChart}>Size Chart</button>
 						</section>
 						<section className="product-size-bottom">
-							<form onSubmit={handleSubmit}>
+							<form>
 								<section className="size-options">
 									{["XS", "S", "M", "L", "XL", "2XL", "3XL", "4XL"].map(
 										(size) => (
@@ -111,18 +134,17 @@ const Product = () => {
 								)}
 								<section className="product-buttons">
 									{isAddedToCart ? (
-										<button
-											type="button"
-											onClick={() => console.log("Go to cart")}
-										>
-											Go to cart
-										</button>
+										<Link to="/cart">
+											<button type="button">Go to cart</button>
+										</Link>
 									) : (
-										<button type="button" onClick={handleAddToCart}>
+										<button type="button" onClick={addToCart}>
 											Add to cart
 										</button>
 									)}
-									<button type="submit">Buy now</button>
+									<button type="button" onClick={handleBuyNow}>
+										Buy now
+									</button>
 								</section>
 							</form>
 						</section>
@@ -131,6 +153,6 @@ const Product = () => {
 			</section>
 		</section>
 	);
-}
+};
 
 export default Product;

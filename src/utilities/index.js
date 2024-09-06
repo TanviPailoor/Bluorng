@@ -1,6 +1,5 @@
 import { v4 as uuid4 } from "uuid";
 
-
 const categories = {
 	Men: [
 		{
@@ -303,7 +302,6 @@ const product = {
 			img: "https://www.snitch.co.in/cdn/shop/files/a88835682a42463b372b84f827c2d8c6.webp?v=1724416086&width=120",
 			id: uuid4(),
 		},
-		
 	],
 	mainImage: {
 		img: "https://www.snitch.co.in/cdn/shop/files/4369ae70e755841ff395fd1207a836fc.webp?v=1724416086&width=1800",
@@ -311,7 +309,8 @@ const product = {
 	},
 	productDetails: {
 		name: "Peach Plaid Checks Shirt",
-		price: "INR 1,199",
+		price: 1199,
+		color:"Blue",
 		desc: [
 			{
 				id: uuid4(),
@@ -334,4 +333,5 @@ const product = {
 		],
 	},
 };
-export { categories, offers ,product};
+
+export { categories, offers, product};
