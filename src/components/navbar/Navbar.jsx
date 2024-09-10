@@ -58,10 +58,12 @@ const Navbar = () => {
 						<FaSearch className="navbar__search-icon" />
 						<input type="text" placeholder="Search..." aria-label="Search" />
 					</div>
-					<FaShoppingCart
-						className="navbar__cart-icon"
-						aria-label="View cart"
-					/>
+					<Link to="/cart">
+						<FaShoppingCart
+							className="navbar__cart-icon"
+							aria-label="View cart"
+						/>
+					</Link>
 				</div>
 			</nav>
 		</>
